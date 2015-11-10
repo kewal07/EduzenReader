@@ -61,7 +61,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN LOGIN -->
 <div class="content">
 	<!-- BEGIN LOGIN FORM -->
-	<form class="login-form" action="index.html" method="post">
+	<form class="login-form" method="post">
 		<h3 class="form-title">Login to your account</h3>
 		<div class="alert alert-danger display-hide">
 			<button class="close" data-close="alert"></button>
@@ -73,20 +73,20 @@ License: You must have a valid license purchased only from themeforest(the above
 			<label class="control-label visible-ie8 visible-ie9">Username</label>
 			<div class="input-icon">
 				<i class="fa fa-user"></i>
-				<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="username"/>
+				<input class="form-control placeholder-no-fix" id="login-username" type="text" autocomplete="off" placeholder="Username" name="username"/>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label visible-ie8 visible-ie9">Password</label>
 			<div class="input-icon">
 				<i class="fa fa-lock"></i>
-				<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password"/>
+				<input class="form-control placeholder-no-fix" id="login-password" type="password" autocomplete="off" placeholder="Password" name="password"/>
 			</div>
 		</div>
 		<div class="form-actions">
 			<label class="checkbox">
 			<input type="checkbox" name="remember" value="1"/> Remember me </label>
-			<button type="submit" class="btn blue pull-right">
+			<button type="submit" id="login-login" class="btn blue pull-right">
 			Login <i class="m-icon-swapright m-icon-white"></i>
 			</button>
 		</div>
@@ -149,16 +149,23 @@ License: You must have a valid license purchased only from themeforest(the above
 	</form>
 	<!-- END FORGOT PASSWORD FORM -->
 	<!-- BEGIN REGISTRATION FORM -->
-	<form class="register-form" action="index.html" method="post">
+	<form class="register-form" method="post">
 		<h3>Sign Up</h3>
 		<p>
 			 Enter your personal details below:
 		</p>
 		<div class="form-group">
+			<label class="control-label visible-ie8 visible-ie9">Profile Pic</label>
+			<div class="input-icon">
+				<i class="fa fa-font"></i>
+				<input type="file" id="profilePhotoFileUpload">
+			</div>
+		</div>
+		<div class="form-group">
 			<label class="control-label visible-ie8 visible-ie9">Full Name</label>
 			<div class="input-icon">
 				<i class="fa fa-font"></i>
-				<input class="form-control placeholder-no-fix" type="text" placeholder="Full Name" name="fullname"/>
+				<input class="form-control placeholder-no-fix" id="signup-full-name" type="text" placeholder="Full Name" name="fullname"/>
 			</div>
 		</div>
 		<div class="form-group">
@@ -166,21 +173,21 @@ License: You must have a valid license purchased only from themeforest(the above
 			<label class="control-label visible-ie8 visible-ie9">Email</label>
 			<div class="input-icon">
 				<i class="fa fa-envelope"></i>
-				<input class="form-control placeholder-no-fix" type="text" placeholder="Email" name="email"/>
+				<input class="form-control placeholder-no-fix" id="signup-email" type="text" placeholder="Email" name="email"/>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label visible-ie8 visible-ie9">Address</label>
 			<div class="input-icon">
 				<i class="fa fa-check"></i>
-				<input class="form-control placeholder-no-fix" type="text" placeholder="Address" name="address"/>
+				<input class="form-control placeholder-no-fix" id="signup-address" type="text" placeholder="Address" name="address"/>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label visible-ie8 visible-ie9">City/Town</label>
 			<div class="input-icon">
 				<i class="fa fa-location-arrow"></i>
-				<input class="form-control placeholder-no-fix" type="text" placeholder="City/Town" name="city"/>
+				<input class="form-control placeholder-no-fix" id="signup-city" type="text" placeholder="City/Town" name="city"/>
 			</div>
 		</div>
 		<div class="form-group">
@@ -430,14 +437,14 @@ License: You must have a valid license purchased only from themeforest(the above
 			<label class="control-label visible-ie8 visible-ie9">Username</label>
 			<div class="input-icon">
 				<i class="fa fa-user"></i>
-				<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="username"/>
+				<input class="form-control placeholder-no-fix" id="signup-username"type="text" autocomplete="off" placeholder="Username" name="username"/>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label visible-ie8 visible-ie9">Password</label>
 			<div class="input-icon">
 				<i class="fa fa-lock"></i>
-				<input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="Password" name="password"/>
+				<input class="form-control placeholder-no-fix" id="signup-password" type="password" autocomplete="off" id="register_password" placeholder="Password" name="password"/>
 			</div>
 		</div>
 		<div class="form-group">
@@ -518,21 +525,65 @@ jQuery(document).ready(function() {
           duration: 8000
     }
     );
-   $("#signup").submit(function(event){
+   Parse.initialize("Ffw4i7SDu6e3koGLzXqcBVWXVFTimvMj9jnrBdzf", "hjRk6pqv5wmXKPqnw5RHI9GBwxTMKKU9vRzmGBW1");
+   
+   //Parse.User.logOut();
+	var parseFile;
+	$('input:file').change(function(){
+		var fileUploadControl = $("#profilePhotoFileUpload")[0];
+		if (fileUploadControl.files.length > 0) {
+			var file = fileUploadControl.files[0];
+			var name = fileUploadControl.files[0].name;
+			parseFile = new Parse.File(name, file);
+			parseFile.save().then(function() {
+				// The file has been saved to Parse.
+			}, function(error) {
+				// The file either could not be read, or could not be saved to Parse.
+			});
+		}
+	});
+	
+   $("#register-submit-btn").click(function(event){
           event.preventDefault();
-          var name = $("#signup-name").val();
-          var pass = $("#signup-password").val();
+          var fullName = $("#signup-full-name").val();
+          var email = $("#signup-email").val();
+		  var address = $("#signup-address").val();
+          var city = $("#signup-city").val();
+		  var country = $("#select2_sample4").val();
+		  var username = $("#signup-username").val();
+		  var password = $("#signup-password").val();
           var user = new Parse.User();
-          user.set("username",name);
-          user.set("password",pass);
+          user.set("username",username);
+          user.set("password",password);
+		  user.set("fullName",fullName);
+          user.set("email",email);
+		  user.set("address",address);
+          user.set("city",city);
+		  user.set("country",country);
+		  user.set("profilePic",parseFile);
           user.signUp(null,{
             success:function(user){
-              checkLogIn();
+              console.log("Signup Success");
             },
             error:function(user,error){
               console.log("Error : "+error.message);
             }
           });
+      });
+	 $("#login-login").click(function(event){
+		event.preventDefault();
+        var username = $("#login-username").val();
+        var password = $("#login-password").val();
+        Parse.User.logIn(username,password,{
+          success:function(){
+            console.log("Log In Success");
+			window.location = "index.html";
+            //checkLogIn();
+          },
+          error:function(user,error){
+            console.log("Error : "+error.message);
+          }
+        });
       });
 });
 </script>

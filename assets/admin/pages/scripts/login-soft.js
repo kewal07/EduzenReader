@@ -126,7 +126,6 @@ var Login = function () {
 
 		function format(state) {
             if (!state.id) return state.text; // optgroup
-			console.log("<img class='flag' src='../../assets/global/img/flags/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text);
 			return "<img class='flag' src='assets/global/img/flags/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
         }
 
@@ -179,7 +178,7 @@ var Login = function () {
 	                    required: true
 	                },
 	                rpassword: {
-	                    equalTo: "#register_password"
+	                    equalTo: "#signup-password"
 	                },
 
 	                tnc: {

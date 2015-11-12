@@ -563,7 +563,11 @@ License: You must have a valid license purchased only from themeforest(the above
 					<a href="javascript:;">
 						<i class="fa fa-pencil-square-o"></i>
 						<span class="title">My Notes</span>
+						<span class="selected"></span>
+						<span class="arrow open"></span>
 					</a>
+					<ul class="sub-menu" id="myNotes">
+					</ul>
 				</li>
 				<li>
 					<a href="javascript:;">
@@ -730,6 +734,11 @@ License: You must have a valid license purchased only from themeforest(the above
 			</h3>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
+			<div class="row">
+				<button id="addNote" >Add Note</button>
+				<input style="display: none" id="noteText" type="text" />
+				<button id="saveNote" style="display: none">Save Note</button>
+			</div><br><br>
 			<div class="container-epub">
             		<div id="area"></div>
         	</div>
@@ -1431,6 +1440,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
 <script src="assets/admin/layout/scripts/zip.min.js" type="text/javascript"></script>
 <script src="assets/admin/layout/scripts/epub.js" type="text/javascript"></script>
+<script src="assets/admin/layout/scripts/rangy-core.js" type="text/javascript"></script>
+<script src="assets/admin/layout/scripts/rangy-serializer.js" type="text/javascript"></script>
 
 <script>
 	jQuery(document).ready(function() {  
@@ -1445,6 +1456,12 @@ License: You must have a valid license purchased only from themeforest(the above
 		height = height - 20;
 		// var height = Metronic.getViewPort().height - $('.page-header').height() - $('.page-footer').height() - 20;
 		Parse.initialize("Ffw4i7SDu6e3koGLzXqcBVWXVFTimvMj9jnrBdzf", "hjRk6pqv5wmXKPqnw5RHI9GBwxTMKKU9vRzmGBW1");
+		var iframe;
+		window.notes = [];
+		var Note;
+		var epub;
+		$("#noteText").css('display','hidden');
+		$("#saveNote").css('display','hidden');
 		//Parse.User.logOut();
 		function goToBook(){
 			alert("hello");
@@ -1453,7 +1470,9 @@ License: You must have a valid license purchased only from themeforest(the above
 			if (Parse.User.current()) {
 				$(".username").text(Parse.User.current().get("username"));
 				var profilePhoto = Parse.User.current().get("profilePic");
-				$(".img-circle").attr("src",profilePhoto.url());
+				if( profilePhoto){
+					$(".img-circle").attr("src",profilePhoto.url());
+				}
 				var books = Parse.Object.extend("Book");
 				var query = new Parse.Query(books);
 				query.limit(10);
@@ -1482,11 +1501,11 @@ License: You must have a valid license purchased only from themeforest(the above
 							  }
 							});
 							console.log(book);
-							var epubBook = ePub(book.get("bookUrl"));
+							epubBook = ePub(book.get("bookUrl"));
 							$(".col-md-12").toggle("slow");
 							$(".container-epub").toggle("slow");
 							epubBook.renderTo("area");
-							$('.page-sidebar-menu').append("<li class='active open'><a href='javascript:;'><i class='icon-rocket'></i><span class='title'>"+book.get('bookName')+"</span><span class='selected'></span><span class='arrow open'></span></a><ul class='sub-menu'></ul></li>");
+							$('.page-sidebar-menu').append("<li class='active open'><a href='javascript:;'><i class='icon-rocket'></i><span class='title'>"+book.get('bookName')+"</span><span class='selected'></span><span class='arrow open'></span></a><ul class='sub-menu' id='contents'></ul></li>");
 
 							$("<div id='prev';' class='arrow'><i class='fa fa-arrow-left'></i></div><div id='next' ;'class='arrow'><i class='fa fa-arrow-right'></i></div>").insertAfter("#area");
 							$("#next").on('click',function(){
@@ -1497,20 +1516,104 @@ License: You must have a valid license purchased only from themeforest(the above
 							});
 							console.log(height);
 							$('#area').css('height', height);
-							// epubBook.getMetadata().then(function(meta){
-							//     document.title = meta.bookTitle+" – "+meta.creator;
-							// });
+
+							//Functionalities for Notes/Highlight
+
+              epubBook.ready.all.then(function() {
+						    iframe = $("iframe")[0];
+						    Note = Parse.Object.extend("Note");
+						    var noteQuery=new Parse.Query(Note);
+						    noteQuery.equalTo("userId", Parse.User.current());
+						    noteQuery.find({
+						      success:function(noteResults){
+						      	if(noteResults.length !== 0){
+							        noteResults.forEach(function(noteItem){
+							          notes.push(
+							          	{
+							          		textCfi:noteItem.get('textCfi'),
+							          		pageCfi:noteItem.get('pageCfi'),
+							          		noteText:noteItem.get('noteText')
+							          	}
+							          );
+							         $('#myNotes').append("<li><a id='"+noteItem.get('pageCfi')+"'>"+noteItem.get('noteText')+"</a></li>");
+							        })
+						      	}
+						      },
+						      error:function(error){
+						        alert('Error: ' + error.code + ' ' + error.message);
+						      }
+						    });
+              });
+              epubBook.on('renderer:chapterDisplayed', function(locationCfi){
+              	if(notes.length !== 0){
+							    notes.forEach(function(noteItem){
+							      if(noteItem.pageCfi === epubBook.getCurrentLocationCfi()){
+							        var textCfi = noteItem.textCfi;
+							        var selection = rangy.deserializeSelection(textCfi,null,iframe.contentWindow)
+							        var range = selection.getRangeAt(0);
+							        var el = document.createElement('span');
+							        el.style.backgroundColor = 'pink';
+							        if (range.canSurroundContents(el)) {
+							            range.surroundContents(el);
+							        } else {
+							            alert('Unable to Highlight/Note');
+							        }
+							      }
+							    })
+						  	}
+							});
+
+						  $("body").on('click','#saveNote',function(){
+						      var selection = rangy.getSelection(iframe);
+						      var Note = Parse.Object.extend('Note');
+						      var note = new Note();
+						      note.set('textCfi',rangy.serializeSelection(selection));
+						      note.set('pageCfi',epubBook.getCurrentLocationCfi());
+						      note.set('userId',Parse.User.current());
+						      note.set('noteText',$("#noteText").val());
+						      note.save({
+						        success:function(){
+						        	alert("Note Added Successfully");
+						        	$("#noteText").css('display','hidden');
+						        },
+						        error:function(error){
+						        	//To be Filled
+						        }
+						      });
+						      var range = selection.getRangeAt(0);
+						      var el = document.createElement('span');
+						      el.style.backgroundColor = 'pink';
+						      if (range.canSurroundContents(el)) {
+						          range.surroundContents(el);
+						      } else {
+						          alert('Unable to Highlight');
+						      }
+						  });
+
+						  $("body").on('click','#addNote',function(){
+						  	$("#noteText").css('display','block');
+						  	$("#saveNote").css('display','block');
+						  });
+
+
+							//
+
 							epubBook.getToc().then(function(toc){
 							  toc.forEach(function(chapter) {
-							  	console.log(chapter);
-							  	$('.sub-menu').append("<li><a href='"+chapter.href+"'>"+chapter.label+"</a></li>");
+							  	//console.log(chapter);
+							  	$('#contents').append("<li><a href='"+chapter.href+"'>"+chapter.label+"</a></li>");
 							  });
-							  $('.sub-menu li').on('click',function(e){
+							  $('#contents li').on('click',function(e){
 							  	e.preventDefault();
 							  	var chapterurl =$(this)[0].firstChild; 
 							  	var chapterhref = chapterurl.href.split('/');
 							  	var url = chapterhref[chapterhref.length - 1];
 							  	epubBook.goto(url);
+							  });
+							  $(document).on('click','#myNotes li',function(e){
+							  	e.preventDefault();
+							  	var pageUrl =$(this)[0].firstChild.id; 
+							  	epubBook.goto(pageUrl);
 							  });
 							});
 						});

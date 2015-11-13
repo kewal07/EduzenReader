@@ -2477,8 +2477,8 @@ Theme Panel
   /* content solid bg color */
 }
 .theme-panel > .toggler {
-  top: 4px;
-  right: 0;
+  top: 4rem;
+  right: 2rem;
   padding: 20px;
   cursor: pointer;
   position: absolute;

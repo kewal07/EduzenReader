@@ -734,10 +734,13 @@ License: You must have a valid license purchased only from themeforest(the above
 			</h3>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
-			<div class="row">
+			<div class="row myRow">
 				<button id="addNote" >Add Note</button>
 				<input style="display: none" id="noteText" type="text" />
 				<button id="saveNote" style="display: none">Save Note</button>
+				<button id="zoomIn" class="zoom">Zoom In</button>
+				<button id="zoomOut" class="zoom">Zoom Out</button>
+				<button id="defaultZoom" class="zoom">Default Zoom</button>
 			</div><br><br>
 			<div class="container-epub">
             		<div id="area"></div>
@@ -1458,6 +1461,8 @@ License: You must have a valid license purchased only from themeforest(the above
 		Parse.initialize("Ffw4i7SDu6e3koGLzXqcBVWXVFTimvMj9jnrBdzf", "hjRk6pqv5wmXKPqnw5RHI9GBwxTMKKU9vRzmGBW1");
 		var iframe;
 		window.notes = [];
+		window.epubBook;
+		var fontSize=1;
 		var Note;
 		var epub;
 		$("#noteText").css('display','hidden');
@@ -1595,7 +1600,6 @@ License: You must have a valid license purchased only from themeforest(the above
 						  	$("#saveNote").css('display','block');
 						  });
 
-
 							//
 
 							epubBook.getToc().then(function(toc){
@@ -1629,6 +1633,23 @@ License: You must have a valid license purchased only from themeforest(the above
 		}
 		$("#my-library-title").click(function(){
 			window.location = "index.html";
+		});
+		$(".zoom").click(function() {
+    	var id = $(this).attr('id');
+    	switch(id.toString()){
+    		case 'zoomIn':
+    			fontSize += 0.2;
+    			epubBook.setStyle('font-size', fontSize+"em");
+    		 break;
+    		case 'zoomOut':
+    			fontSize -= 0.2;
+    			epubBook.setStyle('font-size', fontSize+"em");
+    		 break;
+    		case 'defaultZoom':
+    			epubBook.setStyle('font-size', "1em");
+    		default:
+    			alert('Zooming In/Out Not Possible')
+    	}
 		});
 		checkLogIn();
 	});

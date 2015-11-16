@@ -38,6 +38,13 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
 <link id="style_color" href="assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
 <link href="assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<style>
+*.redItalic {
+    font-style: italic;
+    color: red;
+}
+</style>style>
+
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="favicon.ico"/>
 </head>
@@ -1444,7 +1451,9 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="assets/admin/layout/scripts/zip.min.js" type="text/javascript"></script>
 <script src="assets/admin/layout/scripts/epub.js" type="text/javascript"></script>
 <script src="assets/admin/layout/scripts/rangy-core.js" type="text/javascript"></script>
+<script src="assets/admin/layout/scripts/rangy-classapplier.js" type="text/javascript"></script>
 <script src="assets/admin/layout/scripts/rangy-serializer.js" type="text/javascript"></script>
+<script src="assets/admin/layout/scripts/rangy-textrange.js" type="text/javascript"></script>
 
 <script>
 	jQuery(document).ready(function() {  
@@ -1462,6 +1471,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		var iframe;
 		window.notes = [];
 		window.epubBook;
+		var myrange;
 		var fontSize=1;
 		var Note;
 		var epub;
@@ -1535,8 +1545,8 @@ License: You must have a valid license purchased only from themeforest(the above
 							        noteResults.forEach(function(noteItem){
 							          notes.push(
 							          	{
-							          		textCfi:noteItem.get('textCfi'),
-							          		pageCfi:noteItem.get('pageCfi'),
+							          		chapterHref:noteItem.get('chapterHref'),
+							          		wordRange:noteItem.get('wordRange'),
 							          		noteText:noteItem.get('noteText')
 							          	}
 							          );
@@ -1552,17 +1562,13 @@ License: You must have a valid license purchased only from themeforest(the above
               epubBook.on('renderer:chapterDisplayed', function(locationCfi){
               	if(notes.length !== 0){
 							    notes.forEach(function(noteItem){
-							      if(noteItem.pageCfi === epubBook.getCurrentLocationCfi()){
-							        var textCfi = noteItem.textCfi;
-							        var selection = rangy.deserializeSelection(textCfi,null,iframe.contentWindow)
-							        var range = selection.getRangeAt(0);
-							        var el = document.createElement('span');
-							        el.style.backgroundColor = 'pink';
-							        if (range.canSurroundContents(el)) {
-							            range.surroundContents(el);
-							        } else {
-							            alert('Unable to Highlight/Note');
-							        }
+							      if(noteItem.chapterHref === epubBook.currentChapter.href){
+							      	var el = document.createElement("span");
+											el.style.backgroundColor = "pink";
+											var iframe=$("iframe")[0];
+											var x=noteItem.wordRange;
+											myrange=rangy.getSelection(iframe).restoreCharacterRanges(iframe.contentWindow.document.childNodes[1], x);
+											myrange.surroundContents(el);
 							      }
 							    })
 						  	}
@@ -1572,8 +1578,8 @@ License: You must have a valid license purchased only from themeforest(the above
 						      var selection = rangy.getSelection(iframe);
 						      var Note = Parse.Object.extend('Note');
 						      var note = new Note();
-						      note.set('textCfi',rangy.serializeSelection(selection));
-						      note.set('pageCfi',epubBook.getCurrentLocationCfi());
+						      note.set('wordRange',rangy.getSelection(iframe).saveCharacterRanges(iframe.contentWindow.document.childNodes[1]));
+						      note.set('chapterHref',epubBook.currentChapter.href);
 						      note.set('userId',Parse.User.current());
 						      note.set('noteText',$("#noteText").val());
 						      note.save({

@@ -579,8 +579,18 @@ License: You must have a valid license purchased only from themeforest(the above
 				<li>
 					<a href="javascript:;">
 						<i class="fa fa-text-height"></i>
-						<span class="title">My Highlights</span>
+						<span class="title">test</span>
 					</a>
+				</li>
+				<li>
+					<a href="javascript:;">
+						<i class="fa fa-pencil-square-o"></i>
+						<span class="title">My Highlights</span>
+						<span class="selected"></span>
+						<span class="arrow open"></span>
+					</a>
+					<ul class="sub-menu" id="myHighlights">
+					</ul>
 				</li>
 				<li>
 					<a href="javascript:;">
@@ -748,6 +758,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<button id="zoomIn" class="zoom">Zoom In</button>
 				<button id="zoomOut" class="zoom">Zoom Out</button>
 				<button id="defaultZoom" class="zoom">Default Zoom</button>
+				<button id="highlights" >Mark Highlight</button>
 			</div><br><br>
 			<div class="container-epub">
             		<div id="area"></div>
@@ -1478,7 +1489,9 @@ License: You must have a valid license purchased only from themeforest(the above
 		var myrange;
 		var fontSize=1;
 		var Note;
+		var Highlight;
 		var epub;
+		window.highlights = [];
 		$("#noteText").css('display','hidden');
 		$("#saveNote").css('display','hidden');
 		var crossElement = '<i class="fa fa-times-circle"></i>';
@@ -1574,10 +1587,33 @@ License: You must have a valid license purchased only from themeforest(the above
 							          	{
 							          		chapterHref:noteItem.get('chapterHref'),
 							          		wordRange:noteItem.get('wordRange'),
-							          		noteText:noteItem.get('noteText')
+							          		noteText:noteItem.get('noteText'),
+							          		pageCfi:noteItem.get('pageCfi')
 							          	}
 							          );
 							         $('#myNotes').append("<li><a id='"+noteItem.get('pageCfi')+"'>"+noteItem.get('noteText')+"</a></li>");
+							        })
+						      	}
+						      },
+						      error:function(error){
+						        alert('Error: ' + error.code + ' ' + error.message);
+						      }
+						    });
+						    Highlight = Parse.Object.extend("Highlight");
+						    var highlightQuery=new Parse.Query(Highlight);
+						    highlightQuery.find({
+						      success:function(highlightResults){
+						      	if(highlightResults.length !== 0){
+							        highlightResults.forEach(function(highlightItem){
+							          highlights.push(
+							          	{
+							          		chapterHref:highlightItem.get('chapterHref'),
+							          		wordRange:highlightItem.get('wordRange'),
+							          		text:highlightItem.get('text'),
+							          		pageCfi:highlightItem.get('pageCfi')
+							          	}
+							          );
+							         $('#myHighlights').append("<li><a id='"+highlightItem.get('pageCfi')+"'>"+highlightItem.get('text')+"</a></li>");
 							        })
 						      	}
 						      },
@@ -1595,7 +1631,23 @@ License: You must have a valid license purchased only from themeforest(the above
 											var iframe=$("iframe")[0];
 											var x=noteItem.wordRange;
 											myrange=rangy.getSelection(iframe).restoreCharacterRanges(iframe.contentWindow.document.childNodes[1], x);
-											myrange.surroundContents(el);
+											if(myrange.canSurroundContents(el)){
+												myrange.surroundContents(el);
+											}
+							      }
+							    })
+						  	}
+              	if(highlights.length !== 0){
+							    highlights.forEach(function(highlightItem){
+							      if(highlightItem.chapterHref === epubBook.currentChapter.href){
+							      	var el = document.createElement("span");
+											el.style.backgroundColor = "pink";
+											var iframe=$("iframe")[0];
+											var x=highlightItem.wordRange;
+											myrange=rangy.getSelection(iframe).restoreCharacterRanges(iframe.contentWindow.document.childNodes[1], x);
+											if(myrange.canSurroundContents(el)){
+												myrange.surroundContents(el);
+											}
 							      }
 							    })
 						  	}
@@ -1609,6 +1661,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						      note.set('chapterHref',epubBook.currentChapter.href);
 						      note.set('userId',Parse.User.current());
 						      note.set('noteText',$("#noteText").val());
+						      note.set('pageCfi',epubBook.getCurrentLocationCfi());
 						      note.save({
 						        success:function(){
 						        	alert("Note Added Successfully");
@@ -1618,6 +1671,48 @@ License: You must have a valid license purchased only from themeforest(the above
 						        	//To be Filled
 						        }
 						      });
+						      notes.push({
+						      	wordRange:rangy.getSelection(iframe).saveCharacterRanges(iframe.contentWindow.document.childNodes[1]),
+						      	chapterHref:epubBook.currentChapter.href,
+						      	userId:Parse.User.current(),
+						      	pageCfi:epubBook.getCurrentLocationCfi(),
+						      	noteText:$("#noteText").val()
+						      });
+									$('#myNotes').append("<li><a id='"+epubBook.getCurrentLocationCfi()+"'>"+$("#noteText").val()+"</a></li>");
+						      var range = selection.getRangeAt(0);
+						      var el = document.createElement('span');
+						      el.style.backgroundColor = 'pink';
+						      if (range.canSurroundContents(el)) {
+						          range.surroundContents(el);
+						      } else {
+						          alert('Unable to Highlight');
+						      }
+						  });
+						  $("body").on('click','#highlights',function(){
+						      var selection = rangy.getSelection(iframe);
+						      var Highlight = Parse.Object.extend('Highlight');
+						      var highlight = new Highlight();
+						      highlight.set('wordRange',rangy.getSelection(iframe).saveCharacterRanges(iframe.contentWindow.document.childNodes[1]));
+						      highlight.set('chapterHref',epubBook.currentChapter.href);
+						      highlight.set('userId',Parse.User.current());
+						      highlight.set('pageCfi',epubBook.getCurrentLocationCfi());
+						      highlight.set('text',selection.toString());
+						      highlight.save({
+						        success:function(){
+						        	alert("Highlight Marked");
+						        },
+						        error:function(error){
+						        	alert("Some Error");
+						        }
+						      });
+						      highlights.push({
+						      	wordRange:rangy.getSelection(iframe).saveCharacterRanges(iframe.contentWindow.document.childNodes[1]),
+						      	chapterHref:epubBook.currentChapter.href,
+						      	userId:Parse.User.current(),
+						      	pageCfi:epubBook.getCurrentLocationCfi(),
+						      	text:selection.toString()
+						      });
+							     $('#myHighlights').append("<li><a id='"+epubBook.getCurrentLocationCfi()+"'>"+selection.toString()+"</a></li>");
 						      var range = selection.getRangeAt(0);
 						      var el = document.createElement('span');
 						      el.style.backgroundColor = 'pink';
@@ -1648,6 +1743,11 @@ License: You must have a valid license purchased only from themeforest(the above
 							  	epubBook.goto(url);
 							  });
 							  $(document).on('click','#myNotes li',function(e){
+							  	e.preventDefault();
+							  	var pageUrl =$(this)[0].firstChild.id; 
+							  	epubBook.goto(pageUrl);
+							  });
+							  $(document).on('click','#myHighlights li',function(e){
 							  	e.preventDefault();
 							  	var pageUrl =$(this)[0].firstChild.id; 
 							  	epubBook.goto(pageUrl);

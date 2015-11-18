@@ -3,20 +3,18 @@ var UIAlertDialogApi = function () {
     var handleDialogs = function() {
 
         $('#demo_1').click(function(){
-                bootbox.alert("Hello world!");    
+                bootbox.alert("You already have that book issued. Please visit your library to read it.");    
             });
             //end #demo_1
 
             $('#demo_2').click(function(){
-                bootbox.alert("Hello world!", function() {
-                    alert("Hello world callback");
-                });  
+                bootbox.alert("Book Issued Successfully. Please visit your library to read it.");
             });
             //end #demo_2
         
             $('#demo_3').click(function(){
-                bootbox.confirm("Are you sure?", function(result) {
-                   alert("Confirm result: "+result);
+                bootbox.confirm("Are you sure you want to return this book?", function(result) {
+                  return result;
                 }); 
             });
             //end #demo_3

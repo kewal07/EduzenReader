@@ -2676,6 +2676,7 @@ li.cover-image-li{
 	margin:1rem;
 	cursor:pointer;
   width:33%;
+  position: relative;
 }
 img.cover-image{
   border: 2px dashed #666;
@@ -2706,6 +2707,18 @@ span.central-book-info{
   position: absolute;
   top:23rem !important;
   left:5rem !important;
+}
+.fa-check-circle,.fa-times-circle{
+  position: absolute;
+  font-size: 2rem !important;
+  color: green;
+  top: 7px;
+  left: 0rem;
+  z-index:1000;
+}
+.fa-times-circle{
+  left: 1px;
+  top: -28rem;
 }
 /*End Central Library */
 

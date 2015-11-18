@@ -561,6 +561,7 @@ jQuery(document).ready(function() {
           user.set("city",city);
 		  user.set("country",country);
 		  user.set("profilePic",parseFile);
+		  user.set("issuedBooks",[]);
           user.signUp(null,{
             success:function(user){
               console.log("Signup Success");

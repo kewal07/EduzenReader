@@ -2683,6 +2683,32 @@ img.cover-image{
   padding: 2rem;
   height: 350px;
 }
+.book-functions{
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  top: 31px;
+}
+.book-functions p{
+  display: inline-block;
+}
+p.on-add-note-click{
+  display: none;
+  position: absolute;
+  top: -24px;
+  width:100%;
+}
+input#noteText{
+  width:81.2%;
+}
+.my-btn-default{
+  padding: 0 10px !important;
+  margin-left: 1px !important;
+}
+li.li-on-book-rendered{
+  /*display: none !important;*/
+}
 /*Central library*/
 li.central-cover-image-li{
     margin: 1rem;
@@ -2706,7 +2732,7 @@ span.central-book-info{
 .my-popover{
   position: absolute;
   top:23rem !important;
-  left:5rem !important;
+  left:13rem !important;
 }
 .fa-check-circle,.fa-times-circle{
   position: absolute;

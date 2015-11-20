@@ -1740,7 +1740,7 @@ Quick Sidebar Toggler
   transition: margin 0.3s;
 }
 
-/* Quick sidebar with push content */
+/* Quick sidebar with content */
 .page-quick-sidebar-open.page-quick-sidebar-push-content .page-sidebar-wrapper {
   transition: margin-left 0.3s;
   margin-left: -270px;
@@ -2687,7 +2687,7 @@ img.cover-image{
 li.central-cover-image-li{
     margin: 1rem;
     cursor: pointer;
-    width: 15%;
+    width: 25%;
     float: left;
     position: relative;
     list-style: none;

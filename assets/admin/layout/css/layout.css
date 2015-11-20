@@ -2665,11 +2665,11 @@ figure{
   font-size:2rem;
 }
 figcaption.book-info{
-  position: absolute;
-  bottom: -38rem;
-  width: 35%;
-  left: 12rem;
-  text-align: center;
+    position: absolute;
+    bottom: -225px;
+    width: 100%;
+    left: 0rem;
+    text-align: center;
 }
 li.cover-image-li{
 	display: inline;
@@ -2681,7 +2681,7 @@ li.cover-image-li{
 img.cover-image{
   border: 2px dashed #666;
   padding: 2rem;
-  height: 600px;
+  height: 350px;
 }
 /*Central library*/
 li.central-cover-image-li{
@@ -2717,8 +2717,8 @@ span.central-book-info{
   z-index:1000;
 }
 .fa-times-circle{
-  left: 1px;
-  top: -28rem;
+  left: 2px;
+  top: -160px;
 }
 /*End Central Library */
 

@@ -2706,8 +2706,16 @@ input#noteText{
   padding: 0 10px !important;
   margin-left: 1px !important;
 }
-li.li-on-book-rendered{
-  /*display: none !important;*/
+li{
+  text-transform: capitalize;
+}
+p.no-books{
+  font-size: 2rem;
+  text-align: center;
+}
+p.no-books a.no-books-a{
+  color:orange;
+  font-size:3rem;
 }
 /*Central library*/
 li.central-cover-image-li{
@@ -2747,4 +2755,36 @@ span.central-book-info{
   top: -160px;
 }
 /*End Central Library */
-
+/* Start Profile Page */
+#user-name-profile{
+  text-transform: capitalize;
+}
+.user-profile-pic-div{
+  border-bottom: 2px solid #cfcfcf;
+  padding-bottom: 1rem;
+}
+img#user-profile-pic{
+  width: 250px;
+  height: 250px;
+  border-radius: 50% !important;
+  display: block;
+  margin: 0 auto;
+}
+p.user-p{
+    width: 50%;
+    margin: 0 auto;
+    font-size: 2rem;
+    text-transform: capitalize;
+    font-family: 'Montserrat', sans-serif;
+    padding: 1rem;
+    border: 2px solid;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+/* End Profile Page */
+@media only screen and (min-width: 400px) {
+  .my-popover{
+    left: 0rem !important;
+  }
+}

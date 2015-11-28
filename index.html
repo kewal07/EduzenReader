@@ -90,7 +90,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					</a>
 				</li>
 				<li class="active open">
-					<a href="javascript:;">
+					<a href="index.html">
 						<i class="fa fa-book"></i>
 						<span class="title">My Library</span>
 					</a>
@@ -1057,6 +1057,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		height = height - 20;
 		// var height = Metronic.getViewPort().height - $('.page-header').height() - $('.page-footer').height() - 20;
 		Parse.initialize("Ffw4i7SDu6e3koGLzXqcBVWXVFTimvMj9jnrBdzf", "hjRk6pqv5wmXKPqnw5RHI9GBwxTMKKU9vRzmGBW1");
+		$(".page-sidebar-menu").hide();
 		var iframe;
 		window.notes = [];
 		window.bookmarks = [];
@@ -1158,6 +1159,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							$(".container-epub").toggle("slow");
 							$("#my-library-title").hide();
 							$("#my-sidebar-toggler").trigger("click");
+							$(".page-sidebar-menu").show();
 							epubBook.renderTo("area");
 							$('.page-sidebar-menu').append("<li class='active open'><a href='javascript:;'><i class='icon-rocket'></i><span class='title'>"+book.get('bookName')+"</span><span class='selected'></span><span class='arrow open'></span></a><ul class='sub-menu' id='contents'></ul></li>");
 							$(".book-functions").toggle("slow");

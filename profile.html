@@ -75,6 +75,26 @@ License: You must have a valid license purchased only from themeforest(the above
 		<!-- BEGIN TOP NAVIGATION MENU -->
 		<div class="top-menu">
 			<ul class="nav navbar-nav pull-right">
+			
+				<!-- END TODO DROPDOWN -->
+				<li>
+					<a href="central_library.html">
+						<i class="fa fa-book"></i>
+						<span class="title">Central Library</span>
+					</a>
+				</li>
+				<li class="active open">
+					<a href="index.html">
+						<i class="fa fa-book"></i>
+						<span class="title">My Library</span>
+					</a>
+				</li>
+				<li>
+					<a href="profile.html">
+						<i class="icon-user"></i>
+						<span class="title">Profile</span>
+					</a>
+				</li>
 				<!-- BEGIN USER LOGIN DROPDOWN -->
 				<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 				<li class="dropdown dropdown-user">
@@ -88,7 +108,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<a href="extra_lock.html">
 							<i class="icon-lock"></i> Lock Screen </a>
 						</li>
-						<li class="my-logout">
+						<li class="my-index-logout">
 							<a href="javascript:;">
 							<i class="icon-key"></i> Log Out </a>
 						</li>
@@ -126,7 +146,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					</div>
 					<!-- END SIDEBAR TOGGLER BUTTON -->
 				</li>
-				<li class="active">
+				<!-- <li class="active">
 					<a href="javascript:;">
 						<i class="fa fa-book"></i>
 						<span class="title central-library">Central Library</span>
@@ -137,7 +157,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						<i class="fa fa-book"></i>
 						<span class="title">My Library</span>
 					</a>
-				</li>
+				</li> -->
 				<!-- <li>
 					<a href="javascript:;">
 						<i class="fa fa-bookmark"></i>
@@ -160,12 +180,12 @@ License: You must have a valid license purchased only from themeforest(the above
 						<span class="title">My Highlights</span>
 					</a>
 				</li> -->
-				<li>
+				<!-- <li>
 					<a href="profile.html">
 						<i class="icon-user"></i>
 						<span class="title">Profile</span>
 					</a>
-				</li>
+				</li> -->
 			</ul>
 			<!-- END SIDEBAR MENU -->
 		</div>
@@ -348,7 +368,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		Demo.init(); // init demo features
 		UIAlertDialogApi.init(); //for alert box
 		Parse.initialize("Ffw4i7SDu6e3koGLzXqcBVWXVFTimvMj9jnrBdzf", "hjRk6pqv5wmXKPqnw5RHI9GBwxTMKKU9vRzmGBW1");
-		
+		$(".page-sidebar-menu").hide();
 		function checkLogIn(){
 			var currentUser = Parse.User.current();
 			currentUser.fetch({

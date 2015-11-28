@@ -2230,7 +2230,7 @@ Page content
     margin-left: 235px;
     margin-top: 0px;
     min-height: 600px;
-    padding: 25px 20px 10px 20px;
+    padding: 5px 20px 10px 20px;
   }
   .page-content-wrapper .page-content.no-min-height {
     min-height: auto;
@@ -2686,9 +2686,11 @@ img.cover-image{
 .book-functions{
   display: none;
   position: absolute;
-  left: 58%;
+  left: 50%;
   transform: translate(-50%, 0);
-  top: 31px;
+  top: 6px;
+  right: 50%;
+  width: 41%;
 }
 .book-functions p{
   display: inline-block;

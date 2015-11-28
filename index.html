@@ -69,7 +69,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			<a href="index.html">
 			<img class="logo-header" src="assets/admin/layout/img/logo-big.png" alt="logo" class="logo-default"/>
 			</a>
-			<div class="menu-toggler sidebar-toggler hide">
+			<div class="menu-toggler sidebar-toggler hide" id="my-sidebar-toggler">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 			</div>
 		</div>
@@ -104,6 +104,35 @@ License: You must have a valid license purchased only from themeforest(the above
 				</li>
 				<!-- END USER LOGIN DROPDOWN -->
 			</ul>
+			<div class="book-functions">
+				<div class="f">
+					<p class="on-add-note-click">
+						<input id="noteText" type="text" />
+						<button id="saveNote" class="btn default my-btn-default">Save Note</button>
+					</p>
+					<p>
+						<!-- <i class="fa fa-search-plus" id="addNote"></i> -->
+						<button class="btn green-meadow" id="addNote" >Add Note</button>
+					</p>
+					<p>
+						<button class="btn green-meadow" id="zoomIn" class="zoom">Zoom In</button>
+					</p>
+					<p>
+						<button class="btn green-meadow" id="zoomOut" class="zoom">Zoom Out</button>
+					</p>
+					<p>
+						<button class="btn green-meadow" id="defaultZoom" class="zoom">Default Zoom</button>
+					</p>
+					<p>
+						<button class="btn green-meadow" id="highlights">Highlight</button>
+					</p>
+					<p>
+						<!-- <i class="fa fa-search-plus" id="addNote"></i> -->
+						<button class="btn green-meadow" id="bookmark" >Bookmark</button>
+					</p>
+					
+				</div>
+			</div>
 		</div>
 		<!-- END TOP NAVIGATION MENU -->
 	</div>
@@ -303,35 +332,6 @@ License: You must have a valid license purchased only from themeforest(the above
 			<h3 id ="my-library-title" class="page-title">
 				My Library 
 			</h3>
-			<div class="book-functions">
-				<div class="f">
-					<p class="on-add-note-click">
-						<input id="noteText" type="text" />
-						<button id="saveNote" class="btn default my-btn-default">Save Note</button>
-					</p>
-					<p>
-						<!-- <i class="fa fa-search-plus" id="addNote"></i> -->
-						<button class="btn green-meadow" id="addNote" >Add Note</button>
-					</p>
-					<p>
-						<button class="btn green-meadow" id="zoomIn" class="zoom">Zoom In</button>
-					</p>
-					<p>
-						<button class="btn green-meadow" id="zoomOut" class="zoom">Zoom Out</button>
-					</p>
-					<p>
-						<button class="btn green-meadow" id="defaultZoom" class="zoom">Default Zoom</button>
-					</p>
-					<p>
-						<button class="btn green-meadow" id="highlights">Highlight</button>
-					</p>
-					<p>
-						<!-- <i class="fa fa-search-plus" id="addNote"></i> -->
-						<button class="btn green-meadow" id="bookmark" >Bookmark</button>
-					</p>
-					
-				</div>
-			</div>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="container-epub">
@@ -1156,6 +1156,8 @@ License: You must have a valid license purchased only from themeforest(the above
 							epubBook = ePub(book.get("bookUrl"));
 							$(".col-md-12").toggle("slow");
 							$(".container-epub").toggle("slow");
+							$("#my-library-title").hide();
+							$("#my-sidebar-toggler").trigger("click");
 							epubBook.renderTo("area");
 							$('.page-sidebar-menu').append("<li class='active open'><a href='javascript:;'><i class='icon-rocket'></i><span class='title'>"+book.get('bookName')+"</span><span class='selected'></span><span class='arrow open'></span></a><ul class='sub-menu' id='contents'></ul></li>");
 							$(".book-functions").toggle("slow");

@@ -2686,7 +2686,7 @@ img.cover-image{
 .book-functions{
   display: none;
   position: absolute;
-  left: 50%;
+  left: 58%;
   transform: translate(-50%, 0);
   top: 31px;
 }
@@ -2787,4 +2787,7 @@ p.user-p{
   .my-popover{
     left: 0rem !important;
   }
+}
+.login-options{
+  display:none;
 }
